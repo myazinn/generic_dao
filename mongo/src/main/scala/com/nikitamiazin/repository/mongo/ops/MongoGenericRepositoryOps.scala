@@ -20,7 +20,7 @@ object MongoGenericRepositoryOps extends LowPriorityMongoGenericRepositoryOpsIns
 
   implicit def fromLegacySnapshotable[T <: LegacySnapshotable : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] = {
     implicit val snap: Snapshotable[T] = legacySnapshotableToSnapshotable[T]
-    new SnapshotableMongoGenericRepositoryOps(collection)
+    fromSnapshotable
   }
 }
 
