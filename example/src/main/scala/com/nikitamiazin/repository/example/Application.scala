@@ -1,8 +1,8 @@
 package com.nikitamiazin.repository.example
 
-import com.nikitamiazin.repository.core.MongoCollection
 import com.nikitamiazin.repository.example.domain._
 import com.nikitamiazin.repository.example.repository._
+import com.nikitamiazin.repository.mongo.MongoCollection
 
 import scala.collection.mutable
 

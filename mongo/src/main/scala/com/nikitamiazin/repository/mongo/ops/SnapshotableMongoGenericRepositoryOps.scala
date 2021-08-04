@@ -1,7 +1,7 @@
 package com.nikitamiazin.repository.mongo.ops
 
-import com.nikitamiazin.repository.core.MongoCollection
 import com.nikitamiazin.repository.core.domain.{Regular, Snapshotable}
+import com.nikitamiazin.repository.mongo.MongoCollection
 
 import scala.concurrent.Future
 import scala.reflect.ClassTag
