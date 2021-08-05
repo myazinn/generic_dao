@@ -15,16 +15,16 @@ trait MongoGenericRepositoryOps[T] extends GenericRepositoryOps[T]
 object MongoGenericRepositoryOps extends LowPriorityMongoGenericRepositoryOpsInstances {
   def legacySnapshotableToSnapshotable[T <: LegacySnapshotable]: Snapshotable[T] = _.id
 
-  implicit def fromSnapshotable[T: Snapshotable : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] =
+  implicit def fromSnapshotable[T: Snapshotable : Companion : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] =
     new SnapshotableMongoGenericRepositoryOps(collection)
 
-  implicit def fromLegacySnapshotable[T <: LegacySnapshotable : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] = {
+  implicit def fromLegacySnapshotable[T <: LegacySnapshotable : Companion : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] = {
     implicit val snap: Snapshotable[T] = legacySnapshotableToSnapshotable[T]
     fromSnapshotable
   }
 }
 
 trait LowPriorityMongoGenericRepositoryOpsInstances {
-  implicit def fromRegular[T: Regular : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] =
+  implicit def fromRegular[T: Regular : Companion : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] =
     new RegularMongoGenericRepositoryOps(collection)
 }
