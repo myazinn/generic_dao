@@ -3,7 +3,6 @@ package com.nikitamiazin.repository.example.repository
 import com.nikitamiazin.repository.core.GenericRepository
 import com.nikitamiazin.repository.example.domain.SnapshotableUser
 import com.nikitamiazin.repository.mongo.ops.Companion
-import com.nikitamiazin.repository.mongo.ops.MongoGenericRepositoryOps.fromSnapshotable
 import com.nikitamiazin.repository.mongo.{MongoCollection, MongoGenericRepositoryImpl}
 
 trait SnapshotableUserRepository extends GenericRepository[SnapshotableUser]

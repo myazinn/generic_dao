@@ -1,6 +1,6 @@
 package com.nikitamiazin.repository.mongo.ops
 
-import com.nikitamiazin.repository.core.domain.{Regular, Snapshotable}
+import com.nikitamiazin.repository.core.domain.{ExtractId, ExtractVersion}
 import com.nikitamiazin.repository.core.ops.GenericRepositoryOps
 import com.nikitamiazin.repository.legacy.domain.{Snapshotable => LegacySnapshotable}
 import com.nikitamiazin.repository.mongo.MongoCollection
@@ -13,18 +13,24 @@ import scala.reflect.ClassTag
 trait MongoGenericRepositoryOps[T] extends GenericRepositoryOps[T]
 
 object MongoGenericRepositoryOps extends LowPriorityMongoGenericRepositoryOpsInstances {
-  def legacySnapshotableToSnapshotable[T <: LegacySnapshotable]: Snapshotable[T] = _.id
+  def legacySnapshotableToSnapshotable[T <: LegacySnapshotable]: ExtractVersion[T] = new ExtractVersion[T] {
 
-  implicit def fromSnapshotable[T: Snapshotable : Companion : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] =
+    override type Version = String
+
+    override def version(t: T): Version = t.version
+
+  }
+
+  implicit def snapshotableMongoGenericRepositoryOps[T: ExtractVersion : ExtractId : Companion : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] =
     new SnapshotableMongoGenericRepositoryOps(collection)
 
-  implicit def fromLegacySnapshotable[T <: LegacySnapshotable : Companion : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] = {
-    implicit val snap: Snapshotable[T] = legacySnapshotableToSnapshotable[T]
-    fromSnapshotable
+  implicit def fromLegacySnapshotable[T <: LegacySnapshotable : ExtractId : Companion : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] = {
+    implicit val snap: ExtractVersion[T] = legacySnapshotableToSnapshotable[T]
+    snapshotableMongoGenericRepositoryOps
   }
 }
 
 trait LowPriorityMongoGenericRepositoryOpsInstances {
-  implicit def fromRegular[T: Regular : Companion : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] =
+  implicit def regularMongoGenericRepositoryOps[T: ExtractId : Companion : ClassTag](implicit collection: MongoCollection[T]): MongoGenericRepositoryOps[T] =
     new RegularMongoGenericRepositoryOps(collection)
 }

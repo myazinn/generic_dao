@@ -18,8 +18,8 @@ object Application extends App {
 
   println()
   regularUserRepo.save(RegularUser("regularId", 1))
-  snapshotableUserRepo.save(SnapshotableUser("snapshotableId", 2))
-  legacySnapshotableUserRepo.save(LegacySnapshotableUser("legacySnapshotableId", 3))
+  snapshotableUserRepo.save(SnapshotableUser("snapshotableId", 2, "1"))
+  legacySnapshotableUserRepo.save(LegacySnapshotableUser("legacySnapshotableId", 3, "2"))
 
   println()
   println("let's play a bit")
