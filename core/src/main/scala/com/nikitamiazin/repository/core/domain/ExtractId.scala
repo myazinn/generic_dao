@@ -17,12 +17,6 @@ object ExtractId {
 
   def apply[T](implicit ev: ExtractId[T]): ExtractId[T] = ev
 
-  implicit def default[T <: {def id: String}]: ExtractId[T] = new ExtractId[T] {
-
-    override type Id = String
-
-    override def id(t: T): Id = t.id
-
-  }
+  implicit def materializeExtractId[T]: ExtractId[T] = macro Macro.materializeExtractIdImpl[T]
 
 }
